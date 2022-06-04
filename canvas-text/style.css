@@ -1,0 +1,23 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  background: #333;
+  color: #fff;
+  padding: 2rem;
+}
+
+.panel > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+canvas {
+  margin: 1rem;
+  border: 1px solid salmon;
+}
