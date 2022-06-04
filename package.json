@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "live-server --open=./canvas-text/"
+  },
+  "devDependencies": {
+    "live-server": "^1.1.0"
+  }
+}
