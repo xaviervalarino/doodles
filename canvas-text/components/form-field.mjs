@@ -31,12 +31,21 @@ export default class FormField extends HTMLElement {
   }
 
   connectedCallback() {
+    let timer;
     this.input.oninput = () => {
-      setTimeout(() => {
-        console.log(`${this.id} event: `, this.input.value);
-        clearTimeout(this);
-      }, 500);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        this.emitEvent(this.id, this.input.value);
+      }, 300);
     };
+  }
+
+  emitEvent(id, value) {
+    const event = new CustomEvent("update", {
+      bubbles: true,
+      detail: { id: id, value: value },
+    });
+    this.dispatchEvent(event);
   }
 
   static get observedAttributes() {

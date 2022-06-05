@@ -10,3 +10,7 @@ window.onload = () => {
   const template = document.querySelector("template");
   document.body.appendChild(template.content.cloneNode(true));
 };
+
+window.addEventListener("update", (e) => {
+  console.log(e.detail);
+});

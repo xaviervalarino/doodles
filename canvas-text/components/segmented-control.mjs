@@ -75,6 +75,23 @@ export class SegmentedControl extends HTMLElement {
     this.segments = [...shadow.querySelectorAll("div")];
   }
 
+  connectedCallback() {
+    this.segments.forEach((segment, i) => {
+      segment.onclick = () => this.setCheckedSegment(i);
+    });
+    for (const input of this.inputs) {
+      input.onclick = () => this.emitEvent(input.name, input.value);
+    }
+  }
+
+  emitEvent(id, value) {
+    const event = new CustomEvent("update", {
+      bubbles: true,
+      detail: { id: id, value: value },
+    });
+    this.dispatchEvent(event);
+  }
+
   setCheckedSegment(index) {
     this.inputs.forEach((input, i) => {
       if (index === i) {
@@ -84,12 +101,6 @@ export class SegmentedControl extends HTMLElement {
         input.removeAttribute("checked");
         input.parentNode.classList.remove("selected");
       }
-    });
-  }
-
-  connectedCallback() {
-    this.segments.forEach((segment, i) => {
-      segment.onclick = () => this.setCheckedSegment(i);
     });
   }
 
