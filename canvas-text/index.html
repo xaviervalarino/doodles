@@ -8,56 +8,28 @@
   </head>
   <body>
     <div class="panel">
-      <div class="control">
-        <label for="font-family">font family</label>
-        <input id="font-family" type="text" />
-      </div>
-      <div class="control">
-        <label for="line-height">line height</label>
-        <input id="line-height" type="range" />
-      </div>
-      <div class="control">
-        <label for="letter-spacing">letter spacing</label>
-        <input id="letter-spacing" type="range" />
-      </div>
-      <div class="control">
-        <label for="paragraph-spacing">paragraph spacing</label>
-        <input id="paragraph-spacing" type="range" />
-      </div>
-      <fieldset class="control">
-        <legend>text alignment</legend>
-        <div>
-          <input id="left" type="radio" name="align" value="left" />
-          <label for="left">left</label>
-        </div>
-        <div>
-          <input id="center" type="radio" name="align" value="center" />
-          <label for="center">center</label>
-        </div>
-        <div>
-          <input id="right" type="radio" name="align" value="right" />
-          <label for="right">right</label>
-        </div>
-      </fieldset>
-      <fieldset class="control">
-        <legend>vertical alignment</legend>
-        <div>
-          <input id="top" type="radio" name="align" value="top" />
-          <label for="top">top</label>
-        </div>
-        <div>
-          <input id="middle" type="radio" name="align" value="middle" />
-          <label for="middle">middle</label>
-        </div>
-        <div>
-          <input id="bottom" type="radio" name="align" value="bottom" />
-          <label for="bottom">bottom</label>
-        </div>
-      </fieldset>
+      <form-field type="text" id="font-family">font family</form-field>
+      <form-field type="range" id="line-height">line height</form-field>
+      <form-field type="range" id="letter-spacing">letter spacing </form-field>
+      <form-field type="range" id="paragraph-spacing"
+        >paragraph spacing</form-field
+      >
+      <segmented-control name="align-h">
+        <segment-item>left</segment-item>
+        <segment-item>center</segment-item>
+        <segment-item>right</segment-item>
+      </segmented-control>
+
+      <segmented-control name="align-v">
+        <segment-item>top</segment-item>
+        <segment-item>middle</segment-item>
+        <segment-item>bottom</segment-item>
+      </segmented-control>
     </div>
 
     <canvas></canvas>
 
+    <script src="./components.js" />
     <script src="./index.js"></script>
   </body>
 </html>
