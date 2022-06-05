@@ -4,6 +4,7 @@ import {
   SegmentedControl,
   SegmentItem,
 } from "./components/segmented-control.js";
+import textCanvas from "./text-canvas.js";
 
 // mount components
 window.onload = () => {
@@ -12,5 +13,5 @@ window.onload = () => {
 };
 
 window.addEventListener("update", (e) => {
-  console.log(e.detail);
+  textCanvas(e.detail)
 });
