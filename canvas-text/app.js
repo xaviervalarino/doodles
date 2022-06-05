@@ -1,3 +1,4 @@
+import ControlPanel from "./components/control-panel.mjs";
 import FormField from "./components/form-field.mjs";
 import {
   SegmentedControl,
