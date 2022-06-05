@@ -77,9 +77,28 @@ customElements.define(
       }
     </style>
     `;
+
+    #segments = [...this.querySelectorAll("segment-item")].map((n) => {
+      const text = n.textContent;
+      const checked = Boolean(n.getAttribute("checked"));
+      console.log(text, checked);
+      return `
+        <div>
+          <input
+            name
+            type="radio"
+            id="${text.toLowerCase()}"
+            value="${text.toLowerCase()}"
+          /> 
+          <label for=${text.toLowerCase()}>
+            ${text}
+          </label>
+        </div>
+      `;
+    });
     #component = `
       <fieldset>
-        <slot></slot>
+        ${this.#segments.join(" ")}
       </fieldset>
     `;
     constructor() {
@@ -88,101 +107,50 @@ customElements.define(
       const template = document.createElement("template");
       template.innerHTML = this.#style + this.#component;
       shadow.appendChild(template.content.cloneNode(true));
+
+      this.inputs = shadow.querySelectorAll("input");
     }
 
     connectedCallback() {
-      console.log('segmented control mounted')
+      this.addEventListener("checked", ({detail}) => {
+        // console.log("event parent: checked", detail);
+        this.inputs[detail.child].setAttribute('checked', true)
+      });
     }
 
     static get observedAttributes() {
-      return ['name']
+      return ["name"];
     }
 
     attributeChangedCallback(attr, _, value) {
-      if (attr === 'name') {
-        console.log('selectorAll', this.querySelectorAll('segment-item'))
-        for (const segment of this.querySelectorAll('segment-item')) {
-          segment.setAttribute('name', value)
-          segment.setAttribute('data-shadow', this.shadow)
+      if (attr === "name") {
+        for (const input of this.inputs) {
+          input.setAttribute("name", value);
         }
       }
     }
   }
 );
 
-// light DOM
 customElements.define(
   "segment-item",
   class extends HTMLElement {
-    #style = `
-    <style>
-      segment-item {
-        background: red;
-        cursor: pointer;
-      }
-      segment-item light-dom {
-        cursor: pointer;
-      }
-      segment-item input[type="radio"] {
-        opacity: 0.2;
-        width: 100%;
-        height: 2.75rem;
-        position: absolute
-      }
-      segment-item label {
-        background: purple;
-        padding: 1rem;
-        height: 5rem;
-      }
-    </style>
-    `
-    #component = `
-      <div>
-        <input
-          name
-          type="radio"
-          id="${this.textContent.toLowerCase()}"
-          value="${this.textContent.toLowerCase()}"
-        /> 
-        <label for=${this.textContent.toLowerCase()}>
-          <slot>${this.textContent}</slot>
-        </label>
-      </div>
-    `;
-
     constructor() {
       super();
-      const shadow = this.parentNode.shadowRoot
-      const template = document.createElement('template')
-      this.innerHTML = ''
-      template.innerHTML = this.#style + this.#component;
-      if (this.parentNode.tagName === 'SEGMENTED-CONTROL') {
-        this.appendChild(template.content.cloneNode(true))
-      } else {
-        console.error('<segment-item> must be inside segmented control')
+      if (this.parentNode.tagName !== "SEGMENTED-CONTROL") {
+        console.error("<segment-item> must be inside segmented control");
       }
-      this.radio = this.querySelector('input')
-    }
-
-    connectedCallback() {
-      if (this.parentNode.tagName === 'SEGMENTED-CONTROL') {
-        console.log(this.children)
-        // this.parentElement.appendChild(this)
-        this.radio = this.querySelector('input')
-      }
-      // console.log('this is the callback')
-      // console.log('shadowRoot',this.parentNode.shadowRoot)
-      // this.parentNode.addEventListener('shadow', (e) => {
-      //   console.log('shadow event', e)
-      // })
     }
     static get observedAttributes() {
-      return ['name', 'data-shadow']
+      return ["checked"];
     }
-
-    attributeChangedCallback(attr, _, value) {
-      if (attr === 'name') {
-        this.radio.setAttribute('name', value)
+    attributeChangedCallback(attr) {
+      const parent = this.parentNode;
+      const event = new CustomEvent("checked", {
+        detail: { child: [...parent.children].indexOf(this) },
+      });
+      if (attr === "checked") {
+        parent.dispatchEvent(event);
       }
     }
   }
