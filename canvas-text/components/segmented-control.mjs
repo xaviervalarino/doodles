@@ -43,7 +43,6 @@ export class SegmentedControl extends HTMLElement {
 
   #segments = [...this.querySelectorAll("segment-item")].map((n) => {
     const text = n.textContent;
-    const checked = Boolean(n.getAttribute("checked"));
     return `
         <div>
           <input
@@ -62,11 +61,13 @@ export class SegmentedControl extends HTMLElement {
       <fieldset>
         ${this.#segments.join(" ")}
       </fieldset>
-    `;
+  `;
+
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: "open" });
     const template = document.createElement("template");
+
     template.innerHTML = this.#style + this.#component;
     shadow.appendChild(template.content.cloneNode(true));
 
@@ -112,9 +113,11 @@ export class SegmentItem extends HTMLElement {
       console.error("<segment-item> must be inside segmented control");
     }
   }
+
   static get observedAttributes() {
     return ["checked"];
   }
+
   attributeChangedCallback(attr) {
     const parent = this.parentNode;
     if (attr === "checked") {

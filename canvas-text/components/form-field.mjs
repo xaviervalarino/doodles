@@ -21,6 +21,7 @@ export default class FormField extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: "open" });
     const template = document.createElement("template");
+
     template.innerHTML = this.#style + this.#component;
     shadow.appendChild(template.content.cloneNode(true));
 

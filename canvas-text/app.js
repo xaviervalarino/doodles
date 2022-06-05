@@ -6,7 +6,7 @@ import {
 } from "./components/segmented-control.mjs";
 
 // mount components
-window.addEventListener("load", () => {
+window.onload = () => {
   const template = document.querySelector("template");
   document.body.appendChild(template.content.cloneNode(true));
-});
+};
