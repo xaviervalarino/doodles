@@ -44,7 +44,6 @@ export class SegmentedControl extends HTMLElement {
   #segments = [...this.querySelectorAll("segment-item")].map((n) => {
     const text = n.textContent;
     const checked = Boolean(n.getAttribute("checked"));
-    console.log(text, checked);
     return `
         <div>
           <input
@@ -88,13 +87,8 @@ export class SegmentedControl extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("connected callback");
     this.segments.forEach((segment, i) => {
-      console.log("segment", segment);
-      segment.onclick = () => {
-        console.log("click", segment);
-        this.setCheckedSegment(i);
-      };
+      segment.onclick = () => this.setCheckedSegment(i);
     });
   }
 
