@@ -1,9 +1,9 @@
-import ControlPanel from "./components/control-panel.mjs";
-import FormField from "./components/form-field.mjs";
+import ControlPanel from "./components/control-panel.js";
+import FormField from "./components/form-field.js";
 import {
   SegmentedControl,
   SegmentItem,
-} from "./components/segmented-control.mjs";
+} from "./components/segmented-control.js";
 
 // mount components
 window.onload = () => {
