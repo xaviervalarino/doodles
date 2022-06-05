@@ -2,21 +2,44 @@ export class SegmentedControl extends HTMLElement {
   #style = `
     <style>
       fieldset {
-        display: flex;
-        border: 1px solid;
-        border-radius: 8px;
+        display: inline-grid;
+        grid-template-columns: repeat(${
+          this.querySelectorAll("segment-item").length
+        }, 1fr); 
+        border: 0;
+        outline: 0;
+        background: #222;
+        border-radius: 12px;
+        padding: 4px; 
       }
       div {
-        background: purple;
+        flex: 1 1 0;
+        position:relative;
+        text-align: center;
+        padding: 0.5rem 0.75rem;
+        background: #444;
+        transition: background 0.1s ease-in;
       } 
-      ::slotted(segment-item) {
-        background: salmon;
+      div:first-child {
+        border-radius: 8px 0 0 8px;
       }
-      ::slotted(label) {
-        background: red;
+      div:last-child {
+        border-radius: 0 8px 8px 0;
+      }
+      div.selected {
+        background:  #666;
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
       }
     </style>
-    `;
+  `;
 
   #segments = [...this.querySelectorAll("segment-item")].map((n) => {
     const text = n.textContent;
@@ -48,11 +71,31 @@ export class SegmentedControl extends HTMLElement {
     template.innerHTML = this.#style + this.#component;
     shadow.appendChild(template.content.cloneNode(true));
 
-    this.inputs = shadow.querySelectorAll("input");
+    this.inputs = [...shadow.querySelectorAll("input")];
+    this.segments = [...shadow.querySelectorAll("div")];
   }
 
   setCheckedSegment(index) {
-    this.inputs[index].setAttribute("checked", true);
+    this.inputs.forEach((input, i) => {
+      if (index === i) {
+        input.setAttribute("checked", true);
+        input.parentNode.classList.add("selected");
+      } else {
+        input.removeAttribute("checked");
+        input.parentNode.classList.remove("selected");
+      }
+    });
+  }
+
+  connectedCallback() {
+    console.log("connected callback");
+    this.segments.forEach((segment, i) => {
+      console.log("segment", segment);
+      segment.onclick = () => {
+        console.log("click", segment);
+        this.setCheckedSegment(i);
+      };
+    });
   }
 
   static get observedAttributes() {
@@ -79,7 +122,7 @@ export class SegmentItem extends HTMLElement {
     return ["checked"];
   }
   attributeChangedCallback(attr) {
-    const parent = this.parentNode
+    const parent = this.parentNode;
     if (attr === "checked") {
       parent.setCheckedSegment([...parent.children].indexOf(this));
     }
