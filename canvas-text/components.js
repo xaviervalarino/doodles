@@ -111,11 +111,8 @@ customElements.define(
       this.inputs = shadow.querySelectorAll("input");
     }
 
-    connectedCallback() {
-      this.addEventListener("checked", ({detail}) => {
-        // console.log("event parent: checked", detail);
-        this.inputs[detail.child].setAttribute('checked', true)
-      });
+    setCheckedSegment(index) {
+      this.inputs[index].setAttribute("checked", true);
     }
 
     static get observedAttributes() {
@@ -145,12 +142,8 @@ customElements.define(
       return ["checked"];
     }
     attributeChangedCallback(attr) {
-      const parent = this.parentNode;
-      const event = new CustomEvent("checked", {
-        detail: { child: [...parent.children].indexOf(this) },
-      });
       if (attr === "checked") {
-        parent.dispatchEvent(event);
+        this.parentNode.setCheckedSegment([...parent.children].indexOf(this));
       }
     }
   }
