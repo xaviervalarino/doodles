@@ -31,6 +31,12 @@ export default class TextCanvas extends HTMLElement {
     this.#canvas = this.shadowRoot.querySelector("canvas");
     this.#ctx = this.#canvas.getContext("2d");
     this.#txt = this.textContent.replace(/\s{2,}/g, " ").trim();
+    this.resolution();
+  }
+
+  resolution() {
+    this.#canvas.width = this.#canvas.clientWidth;
+    this.#canvas.height = this.#canvas.clientHeight;
   }
 
   static get observedAttributes() {
