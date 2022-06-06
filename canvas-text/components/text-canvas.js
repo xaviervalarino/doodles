@@ -1,6 +1,9 @@
 import renderText from "../modules/render-text.js";
 
 export default class TextCanvas extends HTMLElement {
+  #canvas;
+  #ctx;
+  #txt;
   #style = `
     <style>
       canvas {
@@ -25,9 +28,9 @@ export default class TextCanvas extends HTMLElement {
   }
 
   connectedCallback() {
-    this.canvas = this.shadowRoot.querySelector("canvas");
-    this.ctx = this.canvas.getContext("2d");
-    this.txt = this.textContent.replace(/\s{2,}/g, " ").trim();
+    this.#canvas = this.shadowRoot.querySelector("canvas");
+    this.#ctx = this.#canvas.getContext("2d");
+    this.#txt = this.textContent.replace(/\s{2,}/g, " ").trim();
   }
 
   static get observedAttributes() {
@@ -42,7 +45,7 @@ export default class TextCanvas extends HTMLElement {
   }
 
   attributeChangedCallback(attr, _, value) {
-    renderText(this.ctx, this.txt, 10, 10, 250, 10, "Inter ");
+    renderText(this.#ctx, this.#txt, 10, 10, 250, 10, "Inter ");
   }
 }
 
