@@ -1,3 +1,5 @@
+import renderText from "../modules/render-text.js";
+
 export default class TextCanvas extends HTMLElement {
   #style = `
     <style>
@@ -20,11 +22,12 @@ export default class TextCanvas extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.canvas = this.shadowRoot.querySelector("canvas")
   }
 
   connectedCallback() {
-    console.log("canvas connected", this.canvas);
+    this.canvas = this.shadowRoot.querySelector("canvas");
+    this.ctx = this.canvas.getContext("2d");
+    this.txt = this.textContent.replace(/\s{2,}/g, " ").trim();
   }
 
   static get observedAttributes() {
@@ -39,9 +42,8 @@ export default class TextCanvas extends HTMLElement {
   }
 
   attributeChangedCallback(attr, _, value) {
-    console.log('canvas', attr, value)
+    renderText(this.ctx, this.txt, 10, 10, 250, 10, "Inter ");
   }
-
 }
 
 customElements.define("text-canvas", TextCanvas);
