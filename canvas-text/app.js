@@ -4,14 +4,19 @@ import {
   SegmentedControl,
   SegmentItem,
 } from "./components/segmented-control.js";
-import textCanvas from "./text-canvas.js";
+import TextCanvas from "./components/text-canvas.js";
 
-// mount components
+let canvas;
+
 window.onload = () => {
+  // mount components
   const template = document.querySelector("template");
   document.body.appendChild(template.content.cloneNode(true));
+  canvas = document.querySelector("text-canvas");
 };
 
-window.addEventListener("update", (e) => {
-  textCanvas(e.detail)
+window.addEventListener("update", ({ detail }) => {
+  if (canvas && "setAttribute" in canvas) {
+    canvas.setAttribute(detail.id, detail.value);
+  }
 });
