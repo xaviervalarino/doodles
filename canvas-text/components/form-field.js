@@ -52,7 +52,7 @@ export default class FormField extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["id", "type"];
+    return ["id", "type", "min", "max", "value"];
   }
 
   attributeChangedCallback(attr, _, value) {
@@ -60,8 +60,8 @@ export default class FormField extends HTMLElement {
       this.label.setAttribute("for", value);
       this.input.setAttribute("id", value);
     }
-    if (attr === "type") {
-      this.input.setAttribute("type", value);
+    if (attr.match(/type|min|max|value/)) {
+      this.input.setAttribute(attr, value);
     }
   }
 }
