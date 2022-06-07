@@ -77,7 +77,7 @@ export class SegmentedControl extends HTMLElement {
 
   connectedCallback() {
     this.segments.forEach((segment, i) => {
-      segment.onclick = () => this.setCheckedSegment(i);
+      segment.onclick = () => this.setDefaultSegment(i);
     });
     for (const input of this.inputs) {
       input.onclick = () => this.emitEvent(input.name, input.value);
@@ -92,7 +92,7 @@ export class SegmentedControl extends HTMLElement {
     this.dispatchEvent(event);
   }
 
-  setCheckedSegment(index) {
+  setDefaultSegment(index) {
     this.inputs.forEach((input, i) => {
       if (index === i) {
         input.setAttribute("checked", true);
@@ -126,13 +126,13 @@ export class SegmentItem extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["checked"];
+    return ["default"];
   }
 
   attributeChangedCallback(attr) {
     const parent = this.parentNode;
-    if (attr === "checked") {
-      parent.setCheckedSegment([...parent.children].indexOf(this));
+    if (attr === "default") {
+      parent.setDefaultSegment([...parent.children].indexOf(this));
     }
   }
 }
