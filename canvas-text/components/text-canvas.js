@@ -38,6 +38,7 @@ export default class TextCanvas extends HTMLElement {
   resolution() {
     this.#canvas.width = this.#canvas.clientWidth;
     this.#canvas.height = this.#canvas.clientHeight;
+    this.#ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
 
   renderText(x, y) {
