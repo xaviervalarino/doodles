@@ -33,10 +33,11 @@ export default class FormField extends HTMLElement {
   connectedCallback() {
     let timer;
     this.input.oninput = () => {
+      const time = this.input.type === "range" ? 5 : 700;
       clearTimeout(timer);
       timer = setTimeout(() => {
         this.emitEvent(this.id, this.input.value);
-      }, 300);
+      }, time);
     };
   }
 
