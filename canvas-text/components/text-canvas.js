@@ -12,10 +12,8 @@ export default class TextCanvas extends HTMLElement {
   #style = `
     <style>
       canvas {
-        --border-width: 10px;
-        height: calc(100% - calc(var(--border-width) * 2));
-        width: calc(100% - calc(var(--border-width) * 2));
-        border: var(--border-width) solid salmon;
+        height: 100%;
+        width: 100%;
       }
     </style>
   `;
