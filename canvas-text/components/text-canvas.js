@@ -1,13 +1,17 @@
 export default class TextCanvas extends HTMLElement {
   #canvas;
   #ctx;
-  #txt;
   // initial values
-  #fontFace = "sans-serif";
-  #fontSize = 16;
-  #lineHeight = this.#fontSize * 1.3;
-  #letterSpacing;
-  #maxWidth = 500;
+  #props = {
+    fontFace: "sans-serif",
+    fontSize: 16,
+    letterSpacing: undefined,
+    lineHeight: 16 * 1.3,
+    width: 500,
+    txt: "",
+    x: 0,
+    y: 0,
+  };
 
   #style = `
     <style>
@@ -31,7 +35,7 @@ export default class TextCanvas extends HTMLElement {
   connectedCallback() {
     this.#canvas = this.shadowRoot.querySelector("canvas");
     this.#ctx = this.#canvas.getContext("2d");
-    this.#txt = this.textContent.replace(/\s{2,}/g, " ").trim();
+    this.#props.txt = this.textContent.replace(/\s{2,}/g, " ").trim();
     this.resolution();
   }
 
@@ -41,21 +45,23 @@ export default class TextCanvas extends HTMLElement {
     this.#ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
 
-  renderText(x, y) {
-    let line = " ";
+  renderText() {
+    const { txt, lineHeight, fontSize, fontFace, width, x } = this.#props;
+    let y = this.#props.y + fontSize * (2 / 3);
+    let line = "";
 
+    // clear canvas for new drawing
     this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-    this.#ctx.font = `${this.#fontSize}px ${this.#fontFace}`;
-    console.log("font", this.#ctx.font);
+    this.#ctx.font = `${fontSize}px ${fontFace}`;
 
-    for (const word of this.#txt.split(" ")) {
-      var testLine = line + word + " ";
-      var metrics = this.#ctx.measureText(testLine);
-      var testWidth = metrics.width;
-      if (testWidth > this.#maxWidth) {
+    for (const word of txt.split(" ")) {
+      let testLine = line + word + " ";
+      let metrics = this.#ctx.measureText(testLine);
+      let testWidth = metrics.width;
+      if (testWidth > width) {
         this.#ctx.fillText(line, x, y);
         line = word + " ";
-        y += this.#lineHeight;
+        y += fontSize * (lineHeight / 100);
       } else {
         line = testLine;
       }
@@ -65,29 +71,25 @@ export default class TextCanvas extends HTMLElement {
 
   static get observedAttributes() {
     return [
-      "font-family",
-      "line-height",
-      "letter-spacing",
-      "paragraph-spacing",
       "align-h",
       "align-v",
+      "font-face",
+      "font-size",
+      "letter-spacing",
+      "line-height",
+      "paragraph-spacing",
+      "width",
+      "x",
+      "y",
     ];
   }
 
   attributeChangedCallback(attr, _, value) {
-    if (attr === "font-family") {
-      this.#fontFace = value;
-      console.log(this.#fontFace);
-    }
-    if (attr === "line-height") {
-      this.#lineHeight = +value;
-    }
-    if (attr === "letter-spacing") {
-      this.#letterSpacing = +value;
-    }
-    if (attr === "paragraph-spacing") {
-    }
-    this.renderText(50, 50);
+    const propName = attr.replace(/-./g, (x) => x[1].toUpperCase());
+    value = isNaN(+value) ? value : +value;
+    this.#props[propName] = value;
+    console.log(propName, this.#props[propName]);
+    this.renderText();
   }
 }
 
