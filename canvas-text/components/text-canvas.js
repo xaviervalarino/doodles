@@ -6,7 +6,7 @@ export default class TextCanvas extends HTMLElement {
     fontFace: "sans-serif",
     fontSize: 16,
     letterSpacing: undefined,
-    lineHeight: 16 * 1.3,
+    lineHeight: 130,
     width: 500,
     txt: "",
     x: 0,
