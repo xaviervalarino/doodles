@@ -4,10 +4,12 @@ export default class FormField extends HTMLElement {
       div {
         display: flex;
         flex-direction: column;
-        background: #444;
+        border-top: 2px solid #444;
+        padding-top: 1rem;
       }
       label {
         text-transform: capitalize; 
+        margin-bottom: .5rem;
       }
     </style>
     `;
