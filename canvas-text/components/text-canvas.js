@@ -1,9 +1,14 @@
-import renderText from "../modules/render-text.js";
-
 export default class TextCanvas extends HTMLElement {
   #canvas;
   #ctx;
   #txt;
+  // initial values
+  #fontFace = "sans-serif";
+  #fontSize = 16;
+  #lineHeight = this.#fontSize * 1.3;
+  #letterSpacing;
+  #maxWidth = 500;
+
   #style = `
     <style>
       canvas {
@@ -37,6 +42,28 @@ export default class TextCanvas extends HTMLElement {
     this.#canvas.height = this.#canvas.clientHeight;
   }
 
+  renderText(x, y) {
+    let line = " ";
+
+    this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+    this.#ctx.font = `${this.#fontSize}px ${this.#fontFace}`;
+    console.log("font", this.#ctx.font);
+
+    for (const word of this.#txt.split(" ")) {
+      var testLine = line + word + " ";
+      var metrics = this.#ctx.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > this.#maxWidth) {
+        this.#ctx.fillText(line, x, y);
+        line = word + " ";
+        y += this.#lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    this.#ctx.fillText(line, x, y);
+  }
+
   static get observedAttributes() {
     return [
       "font-family",
@@ -49,7 +76,19 @@ export default class TextCanvas extends HTMLElement {
   }
 
   attributeChangedCallback(attr, _, value) {
-    renderText(this.#ctx, this.#txt, 10, 10, 250, 10, "Inter ");
+    if (attr === "font-family") {
+      this.#fontFace = value;
+      console.log(this.#fontFace);
+    }
+    if (attr === "line-height") {
+      this.#lineHeight = +value;
+    }
+    if (attr === "letter-spacing") {
+      this.#letterSpacing = +value;
+    }
+    if (attr === "paragraph-spacing") {
+    }
+    this.renderText(50, 50);
   }
 }
 
