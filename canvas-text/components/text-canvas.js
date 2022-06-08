@@ -5,6 +5,7 @@ export default class TextCanvas extends HTMLElement {
   #props = {
     fontFace: "sans-serif",
     fontSize: 16,
+    textAlign: "left",
     letterSpacing: undefined,
     lineHeight: 130,
     width: 500,
@@ -46,13 +47,21 @@ export default class TextCanvas extends HTMLElement {
   }
 
   renderText() {
-    const { txt, lineHeight, fontSize, fontFace, width, x } = this.#props;
+    const { txt, lineHeight, fontSize, fontFace, textAlign, width } =
+      this.#props;
+    const x =
+      textAlign === "left"
+        ? this.#props.x
+        : textAlign === "center"
+        ? this.#props.x + width / 2
+        : this.#props.x + width;
     let y = this.#props.y + fontSize * (2 / 3);
     let line = "";
 
     // clear canvas for new drawing
     this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
     this.#ctx.font = `${fontSize}px ${fontFace}`;
+    this.#ctx.textAlign = textAlign;
 
     for (const word of txt.split(" ")) {
       let testLine = line + word + " ";
@@ -71,13 +80,13 @@ export default class TextCanvas extends HTMLElement {
 
   static get observedAttributes() {
     return [
-      "align-h",
       "align-v",
       "font-face",
       "font-size",
       "letter-spacing",
       "line-height",
       "paragraph-spacing",
+      "text-align",
       "width",
       "x",
       "y",
