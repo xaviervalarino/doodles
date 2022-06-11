@@ -1,4 +1,4 @@
-import FlexBox from './components/flex-box.js'
+import FlexBox from "./components/flex-box.js";
 import ControlPanel from "./components/control-panel.js";
 import FormField from "./components/form-field.js";
 import {
