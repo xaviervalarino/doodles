@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "live-server --open=./canvas-text/"
+    "start": "live-server --open=./canvas-text/ --ignore=.git"
   },
   "devDependencies": {
     "live-server": "^1.1.0"
